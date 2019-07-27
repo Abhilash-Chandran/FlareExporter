@@ -88,12 +88,12 @@ export default class FlareExporterOptions extends Component {
   };
 
   handleDownloadVideo = evt => {
-    const blob = new Blob(this.recordedBlobs, { type: "video/webm" });
+    const blob = new Blob(this.recordedBlobs, { type: "video/mp4" });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.style.display = "none";
     a.href = url;
-    a.download = "test.webm";
+    a.download = "test.mp4";
     document.body.appendChild(a);
     a.click();
     setTimeout(() => {
