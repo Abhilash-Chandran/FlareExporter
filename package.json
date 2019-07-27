@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "ccapture.js": "^1.1.0",
+    "flare-react": "^1.0.4",
     "react": "^16.8.6",
+    "react-dat-gui": "^3.0.0",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1"
   },
