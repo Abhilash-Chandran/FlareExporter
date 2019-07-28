@@ -32,13 +32,13 @@ Note: This is still a wip progress app. Following instructions might not just wo
 
 ## To-Do's
 
-1. Give an option to restart the animation on click of the record button. I think this is a good option. If you want to implicitly record the animation from the begining. As of now the the recorder start recording the moment the button is pressed. this is ensure users can record the animation based on how much of the animation is to be recorded.
-2. Provide options for alterng video bitrate - currently set to 2.5Mbits/s
-3. Handle buttons disabling logic.
-4. Enable dowload gif option.
-5. Anthing you wish can added with a PR :D
-6. Document the code properly and extract components appropriately.
-7. Clean Code and imports.
+- [] Give an option to restart the animation on click of the record button. I think this is a good option. If you want to implicitly record the animation from the begining. As of now the the recorder start recording the moment the button is pressed. this is ensure users can record the animation based on how much of the animation is to be recorded.
+- [] Provide options for alterng video bitrate - currently set to 2.5Mbits/s
+- [] Handle buttons disabling logic.
+- [] Enable dowload gif option.
+- [] Document the code properly and extract components appropriately.
+- [] Clean Code and imports.
+  > Anything you feel required can be added with a PR :D
 
 ---
 
