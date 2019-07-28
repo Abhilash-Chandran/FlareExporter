@@ -1,3 +1,26 @@
+# A simple web app using React to export your Flare(.flr) files into a video. Currently webm and mp4 is supported.
+First and foremost a huge shout out for the 2dimension.com team. More references and documents to come.
+
+## How it looks
+![Look and Feel of the app](poster.png)
+
+## How to set up
+Note: This is still a wip progress app. Following instructions might not just work. It is not completely tested.
+
+1. Clone the repo.
+2. cd int flare-exporter or which ever directory you cloned it to.
+3. run `npm intall`
+4. run `npm start`
+
+
+## To-Do's
+
+1. Provide options for alterng video bitrate - currently set to 2.5Mbits/s
+2. Enable dowload gif option.
+3. Anthing you wish can added with a PR :D
+4. Document the code properly and extract components appropriately.
+5. Clean Code and imports.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
