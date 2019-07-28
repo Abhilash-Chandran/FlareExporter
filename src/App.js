@@ -1,7 +1,7 @@
 import React from "react";
 //import logo from "./logo.svg";
 import "./App.css";
-import FlareExporterOptions from "./components/FlareExporterOptions";
+import FlareExporterOptions from "./components/FlareExporterOptions/FlareExporterOptions";
 
 function App() {
   return (

@@ -1,10 +1,13 @@
 # A simple web app using React to export your Flare(.flr) files into a video. Currently webm and mp4 is supported.
-First and foremost a huge shout out for the 2dimension.com team. More references and documents to come.
+
+First and foremost a huge shout out for the [www.2dimensions.com](https://www.2dimensions.com/) team. More references and documents to come.
 
 ## How it looks
+
 ![Look and Feel of the app](poster.png)
 
-## How to set up
+## How to set up locally
+
 Note: This is still a wip progress app. Following instructions might not just work. It is not completely tested.
 
 1. Clone the repo.
@@ -12,14 +15,31 @@ Note: This is still a wip progress app. Following instructions might not just wo
 3. run `npm intall`
 4. run `npm start`
 
+## How to Use
+
+1. Fiirst choose the flare filer or drag and drop the falre file on to the drop zone marked in big white bordered box.
+2. Adjust the canvas width and height to your preferences
+3. Choose the type of video to be exported.
+4. Type in the animation name which is to be played from the flare file.
+   - If the animation name is typed correctly it will start playing the animation.
+   - Ensure its the correct animation.
+   - It is prefered to have a repeated animation. Otherwise you have to restart the animation and then immediately click the record button.
+5. Choose when to start recording the video and click the start recording button.
+6. Then stop the recording as and when required.
+   > PLease stop the recording within a limited duration. Note that the recorded buffer is part of > > your javascript memory and could lead to eavy memory usage.
+7. Click the download button to download the video in your prefered format.
+   > Soon a gif download option will be tried.. :)
 
 ## To-Do's
 
-1. Provide options for alterng video bitrate - currently set to 2.5Mbits/s
-2. Enable dowload gif option.
-3. Anthing you wish can added with a PR :D
-4. Document the code properly and extract components appropriately.
-5. Clean Code and imports.
+1. Give an option to restart the animation on click of the record button. I think this is a good option. If you want to implicitly record the animation from the begining. As of now the the recorder start recording the moment the button is pressed. this is ensure users can record the animation based on how much of the animation is to be recorded.
+2. Provide options for alterng video bitrate - currently set to 2.5Mbits/s
+3. Enable dowload gif option.
+4. Anthing you wish can added with a PR :D
+5. Document the code properly and extract components appropriately.
+6. Clean Code and imports.
+
+---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
