@@ -8,7 +8,7 @@ First and foremost a huge shout out for the 2dimension.com team. More references
 Note: This is still a wip progress app. Following instructions might not just work. It is not completely tested.
 
 1. Clone the repo.
-2. cd int flare-exporter or which ever directory you cloned it to.
+2. `cd FlareExporter` or which ever directory you cloned it to.
 3. run `npm intall`
 4. run `npm start`
 
