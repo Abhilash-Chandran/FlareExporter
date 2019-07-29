@@ -12,7 +12,7 @@ Note: This is still a wip progress app. Following instructions might not just wo
 
 1. Clone the repo.
 2. `cd FlareExporter` or which ever directory you cloned it to.
-3. run `npm intall`
+3. run `npm install`
 4. run `npm start`
 
 ## How to Use
