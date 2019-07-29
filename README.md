@@ -17,7 +17,7 @@ Note: This is still a wip progress app. Following instructions might not just wo
 
 ## How to Use
 
-1. Fiirst choose the flare filer or drag and drop the falre file on to the drop zone marked in big white bordered box.
+1. First choose the flare file or drag and drop the flare file on to the drop zone marked in big white bordered box.
 2. Adjust the canvas width and height to your preferences
 3. Choose the type of video to be exported.
 4. Type in the animation name which is to be played from the flare file.
@@ -26,7 +26,7 @@ Note: This is still a wip progress app. Following instructions might not just wo
    - It is prefered to have a repeated animation. Otherwise you have to restart the animation and then immediately click the record button.
 5. Choose when to start recording the video and click the start recording button.
 6. Then stop the recording as and when required.
-   > PLease stop the recording within a limited duration. Note that the recorded buffer is part of your javascript memory and could lead to eavy memory usage.
+   > PLease stop the recording within a limited duration(maybe a minute or so). Note that the recorded buffer is part of your javascript memory and could lead to high memory usage. I haven't tested how long this in memory buffer can sustain. :|
 7. Click the download button to download the video in your prefered format.
    > Soon a gif download option will be tried.. :)
 
