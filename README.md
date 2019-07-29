@@ -26,7 +26,7 @@ Note: This is still a wip progress app. Following instructions might not just wo
    - It is prefered to have a repeated animation. Otherwise you have to restart the animation and then immediately click the record button.
 5. Choose when to start recording the video and click the start recording button.
 6. Then stop the recording as and when required.
-   > PLease stop the recording within a limited duration. Note that the recorded buffer is part of > > your javascript memory and could lead to eavy memory usage.
+   > PLease stop the recording within a limited duration. Note that the recorded buffer is part of your javascript memory and could lead to eavy memory usage.
 7. Click the download button to download the video in your prefered format.
    > Soon a gif download option will be tried.. :)
 
