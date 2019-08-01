@@ -1,4 +1,11 @@
-.Field-With-Label {
+.Input-Field-With-Label {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-start;
+}
+
+.Selection-Field-With-Label {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;

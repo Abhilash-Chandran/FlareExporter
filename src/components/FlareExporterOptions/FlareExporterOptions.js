@@ -1,14 +1,17 @@
 import FlareComponent from "flare-react";
 import React, { Component } from "react";
-import FieldWithLabel from "../FieldsWithLabel/FieldWithLabel";
+import InputFieldWithLabel from "../FieldsWithLabel/InputFieldWithLabel";
+import SelctionFieldWithLabel from "../FieldsWithLabel/SelectionFieldWithLabel";
 import "./FlareExporterOptions.css";
+import FlareAnimationController from "../FlareAnimationController/FlareAnimationController.js";
+import IconButton from "../IconButtons/IconButton";
 
 export default class FlareExporterOptions extends Component {
   constructor(props) {
     super();
     // a set of variable to handle the video download.
     this.mediaRecorder = null; // this records the stream from the flare canvas and its handlers push data to recorded blobs.
-    this.recordedBlobs = null; // Holds the recorded chunks of bytes as an array.
+    this.recordedBlobs = []; // Holds the recorded chunks of bytes as an array.
 
     this.state = {
       // variables to be sent to the FlareComponent
@@ -17,7 +20,12 @@ export default class FlareExporterOptions extends Component {
       canvasHeight: 400,
       animationName: "",
       renderAnimation: true, // a local varible to handle display of the canvas.
+      flareController: new FlareAnimationController(),
 
+      // Variable to handle animations
+      animations: [],
+      isAnimating: false,
+      isRecording: false,
       // Video format variable
       videoType: "mp4",
 
@@ -121,11 +129,20 @@ export default class FlareExporterOptions extends Component {
     }
   };
 
-  //handles the video export type format
-  handleVideoTypeChange = evt => {
+  handleFlareComponentLoaded = evt => {
+    console.log("On loade is called with");
     this.setState({
       ...this.state,
-      videoType: evt.target.value
+      animations: this.state.flareController.animations.map(
+        animation => animation._Name
+      )
+    });
+  };
+  //handles the video export type format
+  handleVideoTypeChange = value => {
+    this.setState({
+      ...this.state,
+      videoType: value
     });
   };
   // this handleer is called when the user clicks start or stop recording. Just a delegate method.
@@ -143,6 +160,9 @@ export default class FlareExporterOptions extends Component {
   and creates url for that blob object. Then it creates anchor tag with this url, appends it to the dom 
   and programatically clicks that link so that user is shown a save window. This link is removed after 10ms. */
   handleDownloadVideo = evt => {
+    if (this.recordedBlobs.length === 0) {
+      return;
+    }
     const blob = new Blob(this.recordedBlobs, {
       type: "video/" + this.state.videoType
     });
@@ -157,7 +177,7 @@ export default class FlareExporterOptions extends Component {
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     }, 100);
-    this.recordedBlobs = null; // hope this clears the record buffer blob and avoid any memory leaks.
+    //this.recordedBlobs = []; // hope this clears the record buffer blob and avoid any memory leaks.
   };
 
   /** This method starts the recording proces.
@@ -176,7 +196,7 @@ export default class FlareExporterOptions extends Component {
     const stream = canvas.captureStream(120); // 120fps stream.
 
     //TODO: This should be configurable.
-    //Mp4 format is default 25Mbit/s should be configurable.
+    //Mp4 format is default 2.5Mbit/s should be configurable.
     var options = {
       mimeType: "video/" + this.state.videoType + ";codecs=vp9",
       bitsPerSecond: 2500000
@@ -210,7 +230,8 @@ export default class FlareExporterOptions extends Component {
     this.setState({
       ...this.state,
       downloadVideoDisabled: true,
-      startOrStopRecording: "Stop Recording" // switches the recording button text.
+      startOrStopRecording: "Stop Recording", // switches the recording button text.
+      isRecording: true
     });
     this.mediaRecorder.onstop = this.handleStop.bind(this);
     this.mediaRecorder.ondataavailable = this.handleDataAvailable.bind(this);
@@ -226,7 +247,8 @@ export default class FlareExporterOptions extends Component {
     this.setState({
       ...this.state,
       downloadVideoDisabled: false,
-      startOrStopRecording: "Start Recording"
+      startOrStopRecording: "Start Recording",
+      isRecording: false
     });
   }
 
@@ -251,56 +273,34 @@ export default class FlareExporterOptions extends Component {
       <div className="Flare-Exporter-Options">
         <div className="Options-Fields">
           <input type="file" onChange={this.handleFileSelect} />
-          <FieldWithLabel
+          <InputFieldWithLabel
             label="canvas-width"
             type="number"
             value={this.state.canvasWidth}
             onChange={this.handleCanvasWidthChange}
           />
-          <FieldWithLabel
+          <InputFieldWithLabel
             label="canvas-heght"
             type="number"
             value={this.state.canvasHeight}
             onChange={this.handleCanvasHeightChange}
           />
-          <FieldWithLabel
+          {/* <InputFieldWithLabel
             label="Animation-Name"
             type="text"
             value={this.state.animationName}
             onChange={this.handleAnimationNameChange}
+          /> */}
+          <SelctionFieldWithLabel
+            label="Animation Name"
+            options={this.state.animations}
+            handleChange={this.handleAnimationNameChange}
           />
-          <div className="Field-With-Label">
-            <label>Video Format</label>
-            <select onChange={this.handleVideoTypeChange}>
-              <option value="mp4">Mp4</option>
-              <option value="webm">Webm</option>
-            </select>
-          </div>
-
-          <button
-            onClick={this.handleRestartAnimation}
-            disabled={this.state.animationName === ""}
-          >
-            {this.state.startOrStopAnimation}
-          </button>
-          <button
-            onClick={this.handleRecording}
-            disabled={this.state.recordAnimationDisabled}
-          >
-            {this.state.startOrStopRecording}
-          </button>
-          <button
-            disabled={this.state.downloadVideoDisabled}
-            onClick={this.handleDownloadVideo}
-          >
-            Download Video
-          </button>
-          {/* <button
-            value="Download Gif"
-            disabled={this.state.downloadGifDisabled}
-          >
-            Download Gif
-          </button> */}
+          <SelctionFieldWithLabel
+            label="Video Format"
+            options={["mp4", "webm"]}
+            handleChange={this.handleVideoTypeChange}
+          />
         </div>
         <div>
           {this.state.selectedFile === "" && (
@@ -319,13 +319,35 @@ export default class FlareExporterOptions extends Component {
             </div>
           )}
           {this.state.renderAnimation && (
-            <FlareComponent
-              width={this.state.canvasWidth}
-              height={this.state.canvasHeight}
-              animationName={this.state.animationName}
-              file={this.state.selectedFile}
-            />
+            <div>
+              <FlareComponent
+                width={this.state.canvasWidth}
+                height={this.state.canvasHeight}
+                animationName={this.state.animationName}
+                file={this.state.selectedFile}
+                controller={this.state.flareController}
+                onLoadedAnimations={this.handleFlareComponentLoaded}
+                isPaused={this.state.animationPaused}
+              />
+            </div>
           )}
+          <hr />
+          <div className="IconButtons">
+            <IconButton
+              handleClick={this.handleRestartAnimation}
+              buttonName="Play"
+              toggleClass="pause"
+            />
+            <IconButton
+              handleClick={this.handleRecording}
+              buttonName="Record"
+              toggleClass="stop"
+            />
+            <IconButton
+              handleClick={this.handleDownloadVideo}
+              buttonName="Download"
+            />
+          </div>
         </div>
       </div>
     );

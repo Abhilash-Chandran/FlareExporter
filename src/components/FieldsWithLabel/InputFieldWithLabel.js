@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./FieldWithLabel.css";
 
-class FieldWithLabel extends Component {
+class InputFieldWithLabel extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -11,7 +11,7 @@ class FieldWithLabel extends Component {
   }
   render() {
     return (
-      <div className="Field-With-Label">
+      <div className="Input-Field-With-Label">
         <label>{this.props.label}</label>
         <input
           type={this.props.type}
@@ -23,4 +23,4 @@ class FieldWithLabel extends Component {
   }
 }
 
-export default FieldWithLabel;
+export default InputFieldWithLabel;
