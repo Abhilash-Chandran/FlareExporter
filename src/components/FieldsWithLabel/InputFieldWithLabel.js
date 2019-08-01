@@ -12,12 +12,13 @@ class InputFieldWithLabel extends Component {
   render() {
     return (
       <div className="Input-Field-With-Label">
-        <label>{this.props.label}</label>
         <input
           type={this.props.type}
           value={this.props.value}
           onChange={this.handleChange}
+          className="InputField"
         />
+        <label className="FieldLabel">{this.props.label}</label>
       </div>
     );
   }

@@ -7,16 +7,23 @@ export default class SlectionFieldWithLabel extends Component {
   };
 
   render() {
+    const options = this.props.options;
     return (
       <div className="Selection-Field-With-Label">
-        <label>{this.props.label}</label>
-        <select onChange={this.handleChange}>
-          {this.props.options.map((optionValue, i) => (
-            <option key={this.props.label + "_" + i} value={optionValue}>
-              {optionValue}
-            </option>
+        <select className="SelectField" onChange={this.handleChange}>
+          <optgroup />
+          {Object.keys(options).map(opt_group => (
+            <optgroup label={opt_group}>
+              {options[opt_group].map((optionValue, i) => (
+                <option key={this.props.label + "_" + i} value={optionValue}>
+                  {optionValue}
+                </option>
+              ))}
+            </optgroup>
           ))}
+          <optgroup />
         </select>
+        <label className="FieldLabel">{this.props.label}</label>
       </div>
     );
   }

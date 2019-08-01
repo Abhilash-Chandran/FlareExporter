@@ -1,8 +1,9 @@
 .Flare-Exporter-Options {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  align-content: baseline;
 }
 
 .DropZoneStyle {
@@ -12,42 +13,28 @@
   border-color: white;
 }
 
-.Options-Fields {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-}
-
-.Canvas-Area {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-}
-
-button {
-  background-image: linear-gradient(to right, #b736c6 0%, #f85381 100%);
-  border: none;
-  color: white;
-  padding: 15px 5px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 12px;
-}
-button:hover {
-  box-shadow: 0 12px 16px 0 rgba(253, 252, 252, 0.24),
-    0 17px 50px 0 rgba(255, 255, 255, 0.19);
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
 .IconButtons {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  min-width: 900px;
+  width: 100%;
+}
+
+.inputfile {
+  visibility: hidden;
+}
+
+.filelabel {
+  font-size: small;
+  color: white;
+  display: inline-block;
+}
+
+.VerticalLine {
+  border-left: 0.03em solid #6a6e6a;
+}
+
+.FlareOptionsGrid {
+  display: grid;
 }

@@ -1,13 +1,49 @@
 .Input-Field-With-Label {
+  padding-left: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: flex-start;
+  align-items: center;
+}
+
+.InputField {
+  background-color: #2f2f2f;
+  border: none;
+  /* border-left: 1px solid #6a6e6a; */
+  border-bottom: 1px solid #6a6e6a;
+  color: white;
+  width: 50px;
+  height: 40px;
+  text-align: center;
+}
+
+.InputField:focus {
+  outline-color: #6a6e6a;
 }
 
 .Selection-Field-With-Label {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: flex-start;
+  align-items: center;
+  top: auto;
+  bottom: 100%;
+}
+
+.SelectField {
+  background-color: #2f2f2f;
+  border: none;
+  border-bottom: 1px solid #6a6e6a;
+  color: white;
+  height: 43px;
+  text-align: right;
+  bottom: 100%;
+  display: block;
+  top: auto;
+}
+.SelectField:focus {
+  outline-color: #6a6e6a;
+}
+
+.FieldLabel {
+  padding-top: 10px;
+  font-size: medium;
 }

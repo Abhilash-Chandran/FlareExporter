@@ -16,22 +16,18 @@ export default class FlareExporterOptions extends Component {
     this.state = {
       // variables to be sent to the FlareComponent
       selectedFile: "",
-      canvasWidth: 400,
-      canvasHeight: 400,
+      canvasWidth: 500,
+      canvasHeight: 440,
       animationName: "",
       renderAnimation: true, // a local varible to handle display of the canvas.
-      flareController: new FlareAnimationController(),
+      flareController: new FlareAnimationController(""),
 
       // Variable to handle animations
       animations: [],
-      isAnimating: false,
+      isAnimationPaused: true,
       isRecording: false,
       // Video format variable
       videoType: "mp4",
-
-      // variables to switch the button text.
-      startOrStopAnimation: "Stop Animation",
-      startOrStopRecording: "Start Recording",
 
       // variables to disable certain buttons to avoid errors.
       downloadVideoDisabled: true,
@@ -75,21 +71,21 @@ export default class FlareExporterOptions extends Component {
   /* Since there is no props exposed by FLare component to pause or stop animation this simply 
   stops removes the falre component from the page by conditional rendering. Check the render method.
   It uses the renderAnimation flag for this purpose.*/
-  handleRestartAnimation = evt => {
-    if (this.state.startOrStopAnimation === "Restart Animation") {
+  handlePlayPauseAnimation = evt => {
+    if (this.state.isAnimationPaused) {
       this.setState({
         ...this.setState,
-        renderAnimation: true,
+        //renderAnimation: true,
         recordAnimationDisabled: false,
         downloadVideoDisabled: false,
-        startOrStopAnimation: "Stop Animation"
+        isAnimationPaused: false
       });
     } else {
       this.setState({
         ...this.setState,
-        renderAnimation: false,
+        //renderAnimation: true,
         recordAnimationDisabled: true,
-        startOrStopAnimation: "Restart Animation"
+        isAnimationPaused: true
       });
     }
   };
@@ -114,19 +110,12 @@ export default class FlareExporterOptions extends Component {
 
   // sets the animation name to be played.
   handleAnimationNameChange = value => {
-    if (value != null || value !== "") {
-      this.setState({
-        ...this.state,
-        animationName: value,
-        recordAnimationDisabled: false
-      });
-    } else {
-      this.setState({
-        ...this.state,
-        animationName: value,
-        recordAnimationDisabled: true
-      });
-    }
+    this.setState({
+      ...this.state,
+      //animationName: value,
+      flareController: new FlareAnimationController(value)
+      //recordAnimationDisabled: true
+    });
   };
 
   handleFlareComponentLoaded = evt => {
@@ -271,37 +260,6 @@ export default class FlareExporterOptions extends Component {
   render() {
     return (
       <div className="Flare-Exporter-Options">
-        <div className="Options-Fields">
-          <input type="file" onChange={this.handleFileSelect} />
-          <InputFieldWithLabel
-            label="canvas-width"
-            type="number"
-            value={this.state.canvasWidth}
-            onChange={this.handleCanvasWidthChange}
-          />
-          <InputFieldWithLabel
-            label="canvas-heght"
-            type="number"
-            value={this.state.canvasHeight}
-            onChange={this.handleCanvasHeightChange}
-          />
-          {/* <InputFieldWithLabel
-            label="Animation-Name"
-            type="text"
-            value={this.state.animationName}
-            onChange={this.handleAnimationNameChange}
-          /> */}
-          <SelctionFieldWithLabel
-            label="Animation Name"
-            options={this.state.animations}
-            handleChange={this.handleAnimationNameChange}
-          />
-          <SelctionFieldWithLabel
-            label="Video Format"
-            options={["mp4", "webm"]}
-            handleChange={this.handleVideoTypeChange}
-          />
-        </div>
         <div>
           {this.state.selectedFile === "" && (
             <div
@@ -327,25 +285,82 @@ export default class FlareExporterOptions extends Component {
                 file={this.state.selectedFile}
                 controller={this.state.flareController}
                 onLoadedAnimations={this.handleFlareComponentLoaded}
-                isPaused={this.state.animationPaused}
+                isPaused={this.state.isAnimationPaused}
               />
             </div>
           )}
-          <hr />
+        </div>
+        <div>
+          <input
+            type="file"
+            onChange={this.handleFileSelect}
+            className="inputfile"
+            name="filechooser"
+            id="filechooser"
+          />
           <div className="IconButtons">
             <IconButton
-              handleClick={this.handleRestartAnimation}
+              handleClick={this.handlePlayPauseAnimation}
+              iconText=".flr"
+              toggleClass="pause"
+              labelFor="filechooser"
+              label="Choose"
+            />
+            <InputFieldWithLabel
+              label="Width"
+              type="number"
+              value={this.state.canvasWidth}
+              onChange={this.handleCanvasWidthChange}
+            />
+            <InputFieldWithLabel
+              label="Height"
+              type="number"
+              value={this.state.canvasHeight}
+              onChange={this.handleCanvasHeightChange}
+            />
+            <SelctionFieldWithLabel
+              label="AnimationName"
+              options={{ "Available Animations": this.state.animations }}
+              handleChange={this.handleAnimationNameChange}
+            />
+            <IconButton
+              handleClick={this.handlePlayPauseAnimation}
               buttonName="Play"
               toggleClass="pause"
+              label="Play/Pause"
             />
+            <div className="VerticalLine" />
             <IconButton
               handleClick={this.handleRecording}
               buttonName="Record"
               toggleClass="stop"
+              label="Record"
+            />
+            <SelctionFieldWithLabel
+              label="FrameRate"
+              options={{
+                "Standard FrameRate": [24, 25, 30],
+                "High FrameRate": [48, 50, 60]
+              }}
+              handleChange={this.handleVideoTypeChange}
+            />
+            <SelctionFieldWithLabel
+              label="Quality"
+              options={{
+                SDR: ["1440p", "1080p", "720p", "480p", "360p"],
+                HDR: ["1440p", "1080p", "720p"]
+              }}
+              handleChange={this.handleVideoTypeChange}
+            />
+            <SelctionFieldWithLabel
+              label="Format"
+              options={{ "Video Format": ["mp4", "webm"] }}
+              handleChange={this.handleVideoTypeChange}
             />
             <IconButton
               handleClick={this.handleDownloadVideo}
               buttonName="Download"
+              label="Download"
             />
           </div>
         </div>

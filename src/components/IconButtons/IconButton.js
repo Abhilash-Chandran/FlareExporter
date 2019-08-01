@@ -13,10 +13,21 @@ class IconButton extends Component {
   };
   render() {
     return (
-      <div onClick={this.handleClick}>
-        <div className="OuterCircle">
-          <div ref={this.BtnRef} className={this.props.buttonName + " icon"} />
+      <div>
+        <div onClick={this.handleClick} className="IconStyle">
+          <div className="OuterCircle">
+            <div
+              ref={this.BtnRef}
+              className={this.props.buttonName + " icon"}
+            />
+            {this.props.iconText && (
+              <label for={this.props.labelFor} className="IconText">
+                {this.props.iconText}
+              </label>
+            )}
+          </div>
         </div>
+        <label className="IconLabel">{this.props.label}</label>
       </div>
     );
   }
