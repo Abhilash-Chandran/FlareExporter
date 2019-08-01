@@ -1,16 +1,16 @@
 .Flare-Exporter-Options {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
-  align-content: baseline;
 }
 
 .DropZoneStyle {
   border: 1px;
   border-style: Solid;
   flex-grow: 0.75;
-  border-color: white;
+  border-color: #6a6e6a;
+  font-size: larger;
 }
 
 .IconButtons {

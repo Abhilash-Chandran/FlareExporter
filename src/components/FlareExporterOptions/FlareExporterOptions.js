@@ -5,6 +5,7 @@ import SelctionFieldWithLabel from "../FieldsWithLabel/SelectionFieldWithLabel";
 import "./FlareExporterOptions.css";
 import FlareAnimationController from "../FlareAnimationController/FlareAnimationController.js";
 import IconButton from "../IconButtons/IconButton";
+import getBitRate from "../Utils/Util";
 
 export default class FlareExporterOptions extends Component {
   constructor(props) {
@@ -26,12 +27,17 @@ export default class FlareExporterOptions extends Component {
       animations: [],
       isAnimationPaused: true,
       isRecording: false,
+
       // Video format variable
       videoType: "mp4",
+      bitRate: 2500000, // 2.5 Mbits/s
+      frameRate: 30,
+      quality: "SDR",
+      resolution: "360p",
 
       // variables to disable certain buttons to avoid errors.
       downloadVideoDisabled: true,
-      downloadGifDisabled: true,
+      playAnimationDisabled: true,
       recordAnimationDisabled: true
     };
   }
@@ -41,13 +47,15 @@ export default class FlareExporterOptions extends Component {
     evt.preventDefault();
     this.setState({
       ...this.state,
+      isAnimationPaused: true,
+      flareController: new FlareAnimationController("", false),
       selectedFile: evt.target.files[0],
-      recordAnimationDisabled: false // enables the record animation button.
+      recordAnimationDisabled: false,
+      playAnimationDisabled: false // enables the record animation button.
     });
   };
 
   // A set of handlers to handle the drag and drop of a file into the canvas.
-
   handleDragOver = evt => {
     evt.stopPropagation();
     evt.preventDefault();
@@ -63,6 +71,8 @@ export default class FlareExporterOptions extends Component {
     evt.preventDefault();
     this.setState({
       ...this.state,
+      isAnimationPaused: true,
+      flareController: new FlareAnimationController(""),
       selectedFile: evt.dataTransfer.files[0],
       recordAnimationDisabled: false // enables the record animation button.
     });
@@ -72,23 +82,21 @@ export default class FlareExporterOptions extends Component {
   stops removes the falre component from the page by conditional rendering. Check the render method.
   It uses the renderAnimation flag for this purpose.*/
   handlePlayPauseAnimation = evt => {
+    console.log("Play pause is being caled.");
     if (this.state.isAnimationPaused) {
       this.setState({
         ...this.setState,
-        //renderAnimation: true,
-        recordAnimationDisabled: false,
         downloadVideoDisabled: false,
         isAnimationPaused: false
       });
     } else {
       this.setState({
         ...this.setState,
-        //renderAnimation: true,
-        recordAnimationDisabled: true,
         isAnimationPaused: true
       });
     }
   };
+
   /* following set of methods handle the change of the canvas widht, canvas height and animation name changes.
   Note once all the fields are filled properly, the FlareComponent starts playing the animation automatically 
   as it doesn't expose any props to achieve the start, stop, and pause animation. */
@@ -109,11 +117,11 @@ export default class FlareExporterOptions extends Component {
   };
 
   // sets the animation name to be played.
-  handleAnimationNameChange = value => {
+  handleAnimationNameChange = evt => {
     this.setState({
       ...this.state,
       //animationName: value,
-      flareController: new FlareAnimationController(value)
+      flareController: new FlareAnimationController(evt.target.value)
       //recordAnimationDisabled: true
     });
   };
@@ -128,20 +136,30 @@ export default class FlareExporterOptions extends Component {
     });
   };
   //handles the video export type format
-  handleVideoTypeChange = value => {
+  handleVideoTypeChange = evt => {
     this.setState({
       ...this.state,
-      videoType: value
+      videoType: evt.target.value
     });
   };
   // this handleer is called when the user clicks start or stop recording. Just a delegate method.
   handleRecording = evt => {
-    if (this.state.startOrStopRecording === "Start Recording") {
+    if (!this.state.isRecording) {
       // code for recording start
+      this.setState({
+        ...this.state,
+        downloadVideoDisabled: true,
+        isRecording: true
+      });
       this.startRecording();
     } else {
       // code for stopping the recording.
       this.stopRecording();
+      this.setState({
+        ...this.state,
+        downloadVideoDisabled: false,
+        isRecording: false
+      });
     }
   };
 
@@ -149,6 +167,7 @@ export default class FlareExporterOptions extends Component {
   and creates url for that blob object. Then it creates anchor tag with this url, appends it to the dom 
   and programatically clicks that link so that user is shown a save window. This link is removed after 10ms. */
   handleDownloadVideo = evt => {
+    evt.preventDefault();
     if (this.recordedBlobs.length === 0) {
       return;
     }
@@ -182,13 +201,13 @@ export default class FlareExporterOptions extends Component {
    */
   startRecording() {
     const canvas = document.querySelector("canvas");
-    const stream = canvas.captureStream(120); // 120fps stream.
+    const stream = canvas.captureStream(this.state.frameRate); // 120fps stream.
 
     //TODO: This should be configurable.
     //Mp4 format is default 2.5Mbit/s should be configurable.
     var options = {
       mimeType: "video/" + this.state.videoType + ";codecs=vp9",
-      bitsPerSecond: 2500000
+      bitsPerSecond: this.setState.bitRate
     };
 
     this.recordedBlobs = [];
@@ -197,7 +216,10 @@ export default class FlareExporterOptions extends Component {
     } catch (e0) {
       console.log("Unable to create MediaRecorder with options Object: ", e0);
       try {
-        options = { mimeType: "video/webm;codecs=vp8", bitsPerSecond: 2500000 };
+        options = {
+          mimeType: "video/webm;codecs=vp8",
+          bitsPerSecond: this.setState.bitRate
+        };
         this.mediaRecorder = new MediaRecorder(stream, options);
       } catch (e1) {
         console.log("Unable to create MediaRecorder with options Object: ", e1);
@@ -215,13 +237,6 @@ export default class FlareExporterOptions extends Component {
         }
       }
     }
-
-    this.setState({
-      ...this.state,
-      downloadVideoDisabled: true,
-      startOrStopRecording: "Stop Recording", // switches the recording button text.
-      isRecording: true
-    });
     this.mediaRecorder.onstop = this.handleStop.bind(this);
     this.mediaRecorder.ondataavailable = this.handleDataAvailable.bind(this);
     this.mediaRecorder.start(100); // collect 100ms of data
@@ -254,6 +269,36 @@ export default class FlareExporterOptions extends Component {
     console.log("Recorder stopped: ", event);
   }
 
+  handleFrameRateChange = evt => {
+    let newFrameRate = evt.target.value;
+    let quality = this.state.quality;
+    let resolution = this.state.resolution;
+    let newBitRate = getBitRate(newFrameRate, quality, resolution);
+    console.log(
+      "Inside event handler bitrate is - " + newBitRate / 1000000 + "Mbps"
+    );
+    this.setState({
+      ...this.state,
+      frameRate: newFrameRate,
+      bitRate: newBitRate
+    });
+  };
+
+  handleVideoQualityChange = evt => {
+    let quality = evt.target.options[evt.target.selectedIndex].parentNode.label;
+    let frameRate = this.state.frameRate;
+    let resolution = evt.target.value;
+    let bitRate = getBitRate(frameRate, quality, resolution);
+    console.log(
+      "Inside event handler bitrate is - " + bitRate / 1000000 + "Mbps"
+    );
+    this.setState({
+      ...this.state,
+      bitRate: bitRate,
+      quality: quality,
+      resolution: resolution
+    });
+  };
   /**
    * Main render function which returns the UI to be displayed.
    */
@@ -300,11 +345,12 @@ export default class FlareExporterOptions extends Component {
           />
           <div className="IconButtons">
             <IconButton
-              handleClick={this.handlePlayPauseAnimation}
+              handleClick={() => {}}
               iconText=".flr"
               toggleClass="pause"
               labelFor="filechooser"
               label="Choose"
+              disabled={false}
             />
             <InputFieldWithLabel
               label="Width"
@@ -327,7 +373,9 @@ export default class FlareExporterOptions extends Component {
               handleClick={this.handlePlayPauseAnimation}
               buttonName="Play"
               toggleClass="pause"
-              label="Play/Pause"
+              label="Play"
+              alterLabel="Pause"
+              disabled={this.state.playAnimationDisabled}
             />
             <div className="VerticalLine" />
             <IconButton
@@ -335,6 +383,7 @@ export default class FlareExporterOptions extends Component {
               buttonName="Record"
               toggleClass="stop"
               label="Record"
+              disabled={this.state.recordAnimationDisabled}
             />
             <SelctionFieldWithLabel
               label="FrameRate"
@@ -342,7 +391,7 @@ export default class FlareExporterOptions extends Component {
                 "Standard FrameRate": [24, 25, 30],
                 "High FrameRate": [48, 50, 60]
               }}
-              handleChange={this.handleVideoTypeChange}
+              handleChange={this.handleFrameRateChange}
             />
             <SelctionFieldWithLabel
               label="Quality"
@@ -350,7 +399,7 @@ export default class FlareExporterOptions extends Component {
                 SDR: ["1440p", "1080p", "720p", "480p", "360p"],
                 HDR: ["1440p", "1080p", "720p"]
               }}
-              handleChange={this.handleVideoTypeChange}
+              handleChange={this.handleVideoQualityChange}
             />
             <SelctionFieldWithLabel
               label="Format"
@@ -361,6 +410,7 @@ export default class FlareExporterOptions extends Component {
               handleClick={this.handleDownloadVideo}
               buttonName="Download"
               label="Download"
+              disabled={this.state.downloadVideoDisabled}
             />
           </div>
         </div>

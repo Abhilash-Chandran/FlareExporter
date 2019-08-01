@@ -3,7 +3,7 @@ import React, { Component } from "react";
 
 export default class SlectionFieldWithLabel extends Component {
   handleChange = evt => {
-    this.props.handleChange(evt.target.value);
+    this.props.handleChange(evt);
   };
 
   render() {
@@ -13,9 +13,12 @@ export default class SlectionFieldWithLabel extends Component {
         <select className="SelectField" onChange={this.handleChange}>
           <optgroup />
           {Object.keys(options).map(opt_group => (
-            <optgroup label={opt_group}>
+            <optgroup key={opt_group} label={opt_group}>
               {options[opt_group].map((optionValue, i) => (
-                <option key={this.props.label + "_" + i} value={optionValue}>
+                <option
+                  key={opt_group + "_" + this.props.label + "_" + i}
+                  value={optionValue}
+                >
                   {optionValue}
                 </option>
               ))}
