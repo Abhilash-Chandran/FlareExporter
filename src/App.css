@@ -8,34 +8,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
-
+  align-items: flex-end;
   font-size: calc(10px + 2vmin);
   color: white;
-}
-
-.HelpToggle {
-  transition: 250ms all ease;
-  width: 200px;
-  height: 100vh;
-  background: white;
-  border-right: 2px solid white;
-}
-
-.HelpToggle.collapse {
-  transition: 250ms all ease;
-  width: 0px;
-}
-
-.InfoToggle {
-  transition: 250ms all ease;
-  width: 200px;
-  height: 100vh;
-  background: white;
-  border-right: 2px solid white;
-}
-
-.InfoToggle.collapse {
-  transition: 250ms all ease;
-  width: 0px;
 }

@@ -47,3 +47,10 @@
   padding-top: 10px;
   font-size: medium;
 }
+
+.ExperimentalNote {
+  margin-top: 5px;
+  border-top: 0.03em solid #0dd80d;
+  font-size: small;
+  color: bisque;
+}

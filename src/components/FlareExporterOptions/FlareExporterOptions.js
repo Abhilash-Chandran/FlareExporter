@@ -45,14 +45,17 @@ export default class FlareExporterOptions extends Component {
   // Handler for the file select input .
   handleFileSelect = evt => {
     evt.preventDefault();
-    this.setState({
-      ...this.state,
-      isAnimationPaused: true,
-      flareController: new FlareAnimationController("", false),
-      selectedFile: evt.target.files[0],
-      recordAnimationDisabled: false,
-      playAnimationDisabled: false // enables the record animation button.
-    });
+    if (evt.target.value.length > 0) {
+      // a guard to handle the user cliking cancel or close button.
+      this.setState({
+        ...this.state,
+        isAnimationPaused: true,
+        flareController: new FlareAnimationController("", false),
+        selectedFile: evt.target.files[0],
+        recordAnimationDisabled: false,
+        playAnimationDisabled: false // enables the record animation button.
+      });
+    }
   };
 
   // A set of handlers to handle the drag and drop of a file into the canvas.
@@ -148,6 +151,8 @@ export default class FlareExporterOptions extends Component {
       // code for recording start
       this.setState({
         ...this.state,
+        flareController: new FlareAnimationController(this.state.animationName),
+        isAnimationPaused: false,
         downloadVideoDisabled: true,
         isRecording: true
       });
@@ -157,6 +162,7 @@ export default class FlareExporterOptions extends Component {
       this.stopRecording();
       this.setState({
         ...this.state,
+        isAnimationPaused: true,
         downloadVideoDisabled: false,
         isRecording: false
       });
@@ -387,6 +393,7 @@ export default class FlareExporterOptions extends Component {
             />
             <SelctionFieldWithLabel
               label="FrameRate"
+              experimental={true}
               options={{
                 "Standard FrameRate": [24, 25, 30],
                 "High FrameRate": [48, 50, 60]
@@ -395,6 +402,7 @@ export default class FlareExporterOptions extends Component {
             />
             <SelctionFieldWithLabel
               label="Quality"
+              experimental={true}
               options={{
                 SDR: ["1440p", "1080p", "720p", "480p", "360p"],
                 HDR: ["1440p", "1080p", "720p"]

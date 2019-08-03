@@ -1,4 +1,5 @@
 .Flare-Exporter-Options {
+  margin: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -33,6 +34,10 @@
 
 .VerticalLine {
   border-left: 0.03em solid #6a6e6a;
+}
+.HorizontalLine {
+  border-top: 0.03em solid #0dd80d;
+  font-size: small;
 }
 
 .FlareOptionsGrid {

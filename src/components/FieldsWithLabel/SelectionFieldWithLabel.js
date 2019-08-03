@@ -27,6 +27,9 @@ export default class SlectionFieldWithLabel extends Component {
           <optgroup />
         </select>
         <label className="FieldLabel">{this.props.label}</label>
+        {this.props.experimental && (
+          <div className="ExperimentalNote">experimental</div>
+        )}
       </div>
     );
   }
